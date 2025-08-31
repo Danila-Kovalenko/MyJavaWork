@@ -1,19 +1,30 @@
+import java.util.Scanner;
+
 public class AppRaumbuchung {
     public static void main(String[] args) {
-        Firma f = new Firma("Raum & Co", "Hauptstraße 1", 5);
+        Firma f = new Firma("Daniel & Co", "Oranienstraße 5-7", 5);
 
-        // Räume hinzufügen
-        f.fuegeRaumHinzu(10);   // Raum 0
-        f.fuegeRaumHinzu(20);   // Raum 1
-        f.fuegeRaumHinzu(30);   // Raum 2
+        f.fuegeRaumHinzu(20);   
+        f.fuegeRaumHinzu(10);   
+        f.fuegeRaumHinzu(30);
 
         System.out.println("Firma: " + f.getName() + ", Adresse: " + f.getAdresse());
         System.out.println("Max Räume: " + f.getMaxRaeume() + ", aktuell: " + f.getAnzahlRaeume());
 
-        int nr = f.sucheRaum(25);
-        System.out.println("Suche Raum >= 25 Plätze: Ergebnis = " + nr);
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Bitte gewünschte Anzahl an Sitzplätzen eingeben: ");
+        int plaetze = sc.nextInt();
 
-        System.out.println("Freie Räume: " + f.anzahlFrei());
+        int raumNummer = f.sucheRaum(plaetze);
+        if (raumNummer >= 0) {
+            System.out.println("Optimaler Raum gefunden: Nummer = " + raumNummer);
+        } else {
+            System.out.println("Kein freier Raum mit mindestens " + plaetze + " Plätzen verfügbar.");
+        }
+
+        System.out.println("Noch freie Räume: " + f.anzahlFrei());
+
+        sc.close();
     }
 }
 
@@ -23,8 +34,9 @@ class Firma {
     private int maxRaeume;
     private int anzahlRaeume;
 
-    private int[] raeumePlaetze;     // Plätze je Raum
-    private boolean[] raeumeGebucht; // true = gebucht
+    private int[] raeumePlaetze;     
+    private boolean[] raeumeGebucht; 
+    private int[] raeumeNummern;
 
     public Firma(String name, String adresse, int maxRaeume) {
         this.name = name;
@@ -33,6 +45,7 @@ class Firma {
         this.anzahlRaeume = 0;
         this.raeumePlaetze = new int[maxRaeume];
         this.raeumeGebucht = new boolean[maxRaeume];
+        this.raeumeNummern = new int[maxRaeume];
     }
 
     public String getName() { return name; }
@@ -44,6 +57,7 @@ class Firma {
         if (anzahlRaeume < maxRaeume) {
             raeumePlaetze[anzahlRaeume] = plaetze;
             raeumeGebucht[anzahlRaeume] = false;
+            raeumeNummern[anzahlRaeume] = 101 + anzahlRaeume;
             anzahlRaeume++;
         } else {
             System.out.println("Maximale Anzahl Räume erreicht!");
@@ -51,11 +65,25 @@ class Firma {
     }
 
     public int sucheRaum(int plaetze) {
+        int bestIndex = -1;
+        int bestKap = Integer.MAX_VALUE;
+        int bestNummer = Integer.MAX_VALUE;
+
         for (int i = 0; i < anzahlRaeume; i++) {
             if (!raeumeGebucht[i] && raeumePlaetze[i] >= plaetze) {
-                raeumeGebucht[i] = true;
-                return i;
+                int kap = raeumePlaetze[i];
+                int num = raeumeNummern[i];
+                if (kap < bestKap || (kap == bestKap && num < bestNummer)) {
+                    bestKap = kap;
+                    bestNummer = num;
+                    bestIndex = i;
+                }
             }
+        }
+
+        if (bestIndex >= 0) {
+            raeumeGebucht[bestIndex] = true;
+            return raeumeNummern[bestIndex];
         }
         return -1;
     }
