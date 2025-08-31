@@ -1,6 +1,17 @@
+import java.util.Scanner;
+
 public class AppRadio {
     public static void main(String[] args) {
-        Radio r1 = new Radio();
+        Scanner sc = new Scanner(System.in);
+
+        // Eingabe Startwerte für r1
+        System.out.print("Starteinstellungen für Radio r1\n");
+        System.out.print("Lautstärke (0..10): ");
+        int laut = sc.nextInt();
+        System.out.print("Frequenz (85.0..110.0): ");
+        double freq = sc.nextDouble();
+
+        Radio r1 = new Radio(false, laut, freq);
         System.out.println("Start r1: " + r1);
 
         r1.an();
@@ -14,13 +25,22 @@ public class AppRadio {
 
         System.out.println();
 
-        Radio r2 = new Radio(true, 5, 200.0); // ungültige Frequenz -> 99.9
+        // Eingabe Startwerte für r2
+        System.out.print("Starteinstellungen für Radio r2\n");
+        System.out.print("Lautstärke (0..10): ");
+        int laut2 = sc.nextInt();
+        System.out.print("Frequenz (85.0..110.0): ");
+        double freq2 = sc.nextDouble();
+
+        Radio r2 = new Radio(true, laut2, freq2);
         System.out.println("Start r2: " + r2);
 
         r2.lauter();
         r2.lauter();
         r2.waehleSender(95.7);
         System.out.println("r2: " + r2);
+
+        sc.close();
     }
 }
 
