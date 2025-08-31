@@ -1,6 +1,16 @@
+import java.util.Scanner;
+
 public class AppPunkt {
     public static void main(String[] args) {
-        Punkt p1 = new Punkt(3, 4);
+        Scanner sc = new Scanner(System.in);
+
+        // Eingabe Punkt p1
+        System.out.print("Gib x-Koordinate von p1 ein: ");
+        double x1 = sc.nextDouble();
+        System.out.print("Gib y-Koordinate von p1 ein: ");
+        double y1 = sc.nextDouble();
+        Punkt p1 = new Punkt(x1, y1);
+
         System.out.println("Punkt p1: " + p1);
         System.out.println("Abstand p1 zum Ursprung: " + p1.abstandZumUrsprung());
 
@@ -11,10 +21,17 @@ public class AppPunkt {
         System.out.println("Spiegelung an Y-Achse: " + p1y);
         System.out.println("Spiegelung am Ursprung: " + p1o);
 
-        Punkt p2 = new Punkt(-1, 2);
-        System.out.println("Punkt p2: " + p2);
+        // Eingabe Punkt p2
+        System.out.print("\nGib x-Koordinate von p2 ein: ");
+        double x2 = sc.nextDouble();
+        System.out.print("Gib y-Koordinate von p2 ein: ");
+        double y2 = sc.nextDouble();
+        Punkt p2 = new Punkt(x2, y2);
 
+        System.out.println("Punkt p2: " + p2);
         System.out.println("Abstand zwischen p1 und p2: " + p1.abstandZu(p2));
+
+        sc.close();
     }
 }
 
